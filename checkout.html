@@ -53,33 +53,39 @@
                 <label for="phone" class="form-label">Phone Number</label>
                 <input type="tel" id="phone" name="phone" class="form-control" required>
             </div>
-            <a href='message.html'button type="submit" class="btn-submit">Submit</button>
+            <button type="submit" class="btn-submit">Submit</button>
         </form>
     </div>
 <script>
-    document.getElementById('checkoutForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
+ document.getElementById('checkoutForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-        const formData = new URLSearchParams({
-            name: document.getElementById('name').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim()
+    const formData = new URLSearchParams({
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim()
+    });
+
+    try {
+        const response = await fetch('https://project-b7kg.onrender.com/submit', { // Update this URL
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString()
         });
 
-        try {
-            const response = await fetch('/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData.toString()
-            });
+        const result = await response.text();
+        alert(result);  // Show success or error message
 
-            const result = await response.text();
-            alert(result);  // Show success or error message
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Failed to submit the form. Please try again.");
+        // Redirect to message.html after alert
+        if (result.includes("successfully")) {
+            window.location.href = "/message.html";
         }
-    });
+    } catch (error) {
+       // console.error("successfully:", error);
+        //alert("Failed to submit the form. Please try again.");
+		window.location.href = "/message.html";
+    }
+});
 </script>
 
 </body>
